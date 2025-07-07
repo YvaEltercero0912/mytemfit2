@@ -1,0 +1,79 @@
+@import "./import/general.css";
+@import "./import/nav-bar.css";
+@import "./import/modal.css";
+
+.contenedor-principal {
+  width: 100%;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.seccion-1 {
+  width: 90%;
+  background-color: #202020;
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 20px;
+
+  .seccion-1_titulo {
+    width: 100%;
+    text-align: center;
+  }
+
+  .seccion-1_ejercicios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .ejercicios {
+      width: 90vw;
+      background-color: #ff6200;
+      border-radius: 5px;
+    }
+  }
+}
+
+.seccion-2 {
+  width: 90vw;
+  background-color: #202020;
+}
+
+.tabla-rutina {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 5px;
+}
+
+.tabla-rutina_categorias {
+  width: 40vw;
+}
+
+.categorias-titulo {
+  width: 100%;
+  background-color: #ff6200;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  text-align: center;
+}
+
+.ejercicios_nombre {
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+  }
+}
+
+.categorias-dato {
+  padding: 10px;
+  background-color: #303030;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}

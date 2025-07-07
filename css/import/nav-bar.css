@@ -1,0 +1,44 @@
+.nav-bar {
+  width: 100%;
+  height: 60px;
+  background-color: #202020;
+  position: fixed;
+  bottom: 0px;
+  display: flex;
+
+  .seccion {
+    width: 33.33vw;
+    background-color: #202020;
+  }
+
+  .seccion:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 40px;
+      filter: invert();
+    }
+  }
+
+  .seccion:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    position: relative;
+
+    .seccion_img {
+      width: 50%;
+      border-radius: 30px;
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      background-color: #202020;
+      top: -20px;
+
+      img {
+        width: 50px;
+      }
+    }
+  }
+}
