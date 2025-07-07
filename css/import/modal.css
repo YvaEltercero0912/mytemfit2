@@ -1,0 +1,16 @@
+.modal-body {
+  background: #202020;
+}
+
+.modal-header {
+  background: #202020;
+  border-bottom: 0px !important;
+}
+
+button.btn-close {
+  filter: invert(1);
+}
+
+.modal-body_titulo {
+  text-align: center;
+}
