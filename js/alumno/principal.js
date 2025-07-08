@@ -72,74 +72,78 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/index.html";
   });
 
-  const searchButton = document.getElementById("btn-search");
-  const routineBox = document.querySelector(".routine-box");
+  const listaEjercicios = document.getElementById("lista-ejercicios");
+const detalleEjercicio = document.getElementById("detalle-ejercicio");
+const user = JSON.parse(localStorage.getItem("userData"));
 
-  async function getRutina() {
-    const user = JSON.parse(localStorage.getItem("userData"));
-    const anio = selectYear.value;
-    const mes = selectMonth.value;
-    const semana = selectWeek.value;
-    const dia = selectDia.value;
+async function getRutina() {
+  const anio = selectYear.value;
+  const mes = selectMonth.value;
+  const semana = selectWeek.value;
+  const dia = selectDia.value;
 
-    if (!user || !user.id) return;
+  if (!user || !user.id) return;
 
-    try {
-      const res = await fetch(`http://localhost:3000/planificacion?id_alumno=${user.id}&anio=${anio}&mes=${mes}&semana=${semana}&dia=${dia}`);
-      const data = await res.json();
+  try {
+    const res = await fetch(`http://localhost:3000/planificacion?id_alumno=${user.id}&anio=${anio}&mes=${mes}&semana=${semana}&dia=${dia}`);
+    const data = await res.json();
 
-      if (!Array.isArray(data) || data.length === 0) {
-        routineBox.innerHTML = `<p>No hay planificación para ${days[dia]}, semana ${semana}, ${months[mes - 1]} ${anio}.</p>`;
-      } else {
-        let html = `
-          <h3>Planificación para ${days[dia]} - Semana ${semana} / ${months[mes - 1]} ${anio}</h3>
-          <table class="tabla-rutina">
-            <thead>
-              <tr>
-                <th>Ejercicio</th>
-                <th>Series</th>
-                <th>Reps</th>
-                <th>Kg</th>
-                <th>Nota</th>
-                <th>Video</th>
-              </tr>
-            </thead>
-            <tbody>
-        `;
+    listaEjercicios.innerHTML = "";
 
-        const ordenados = [
-          ...data.filter(e => e.tipo === "basico"),
-          ...data.filter(e => e.tipo !== "basico")
-        ];
+    const ordenados = [
+      ...data.filter(e => e.tipo === "basico"),
+      ...data.filter(e => e.tipo !== "basico")
+    ];
 
-        ordenados.forEach(ej => {
-          const videoHTML = ej.video
-            ? `<a href="${ej.video}" target="_blank"><img src="/img/play.png" alt="Video" class="icono-play" style="width: 20px;"></a>`
-            : "";
-          const colorStyle = ej.tipo === "basico" ? "style='color:red'" : "";
-          html += `
-            <tr ${colorStyle}>
-              <td><strong>${ej.ejercicio}</strong></td>
-              <td>${ej.series}</td>
-              <td>${ej.repes}</td>
-              <td>${ej.kg}</td>
-              <td>${ej.nota || "—"}</td>
-              <td>${videoHTML}</td>
-            </tr>
-          `;
-        });
+    ordenados.forEach((ej, index) => {
+      const div = document.createElement("div");
+      div.className = "ejercicios";
+      div.innerHTML = `
+        <div class="ejercicios_nombre">
+          <button
+            class="btn btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            data-index="${index}"
+          >
+            ${ej.ejercicio}
+          </button>
+        </div>
+      `;
+      listaEjercicios.appendChild(div);
+    });
 
-        html += `</tbody></table>`;
-        routineBox.innerHTML = html;
-      }
-    } catch (err) {
-      console.error("Error al obtener rutina:", err);
-      routineBox.innerHTML = `<p>Error al cargar la rutina.</p>`;
-    }
+    // Almacena datos globalmente para usar al hacer clic
+    window.listaDeEjercicios = ordenados;
+  } catch (err) {
+    console.error("Error al obtener rutina:", err);
+    listaEjercicios.innerHTML = `<p>Error al cargar ejercicios.</p>`;
   }
+}
 
-  searchButton.addEventListener("click", getRutina);
-  getRutina();
+// Evento al abrir el modal
+document.getElementById("exampleModal").addEventListener("show.bs.modal", (e) => {
+  const button = e.relatedTarget;
+  const index = button.getAttribute("data-index");
+  const ej = window.listaDeEjercicios[index];
+
+  const videoHTML = ej.video
+    ? `<a href="${ej.video}" target="_blank"><img src="/img/play.png" alt="Video" class="icono-play" style="width: 20px;"></a>`
+    : "—";
+
+  detalleEjercicio.innerHTML = `
+    <p><strong>Ejercicio:</strong> ${ej.ejercicio}</p>
+    <p><strong>Series:</strong> ${ej.series}</p>
+    <p><strong>Repeticiones:</strong> ${ej.repes}</p>
+    <p><strong>Kg:</strong> ${ej.kg}</p>
+    <p><strong>Nota:</strong> ${ej.nota || "—"}</p>
+    <p><strong>Video:</strong> ${videoHTML}</p>
+  `;
+});
+
+searchButton.addEventListener("click", getRutina);
+getRutina();
+
 
   // ============================
   // ESTADO DE PAGO SEGÚN FECHA
